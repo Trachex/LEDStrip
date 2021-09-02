@@ -1,9 +1,23 @@
 #include <Arduino.h>
+#include "LEDManager/LEDManager.hpp"
+
+class Tape {
+	public:
+		Tape();
+	private:
+		LEDManager ledManager;
+};
+
+Tape::Tape() {
+	
+}
+
+Tape api;
 
 void setup() {
-  // put your setup code here, to run once:
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+
 }
