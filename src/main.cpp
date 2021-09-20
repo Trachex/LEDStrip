@@ -4,20 +4,25 @@
 class Tape {
 	public:
 		Tape();
+		void tick();
 	private:
-		LEDManager ledManager;
+		LEDManager* ledManager;
 };
 
 Tape::Tape() {
-	
+	ledManager = new LEDManager();
 }
 
-Tape api;
+void Tape::tick() {
+	ledManager->tick();
+}
+
+Tape* api;
 
 void setup() {
-
+	api = new Tape();
 }
 
 void loop() {
-
+	api->tick();
 }

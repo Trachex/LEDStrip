@@ -5,7 +5,8 @@
 class LEDManager {
     public:
         LEDManager();
+        void tick();
     private:
-        CRGB leds;
+        CRGB* leds;
 };
 
