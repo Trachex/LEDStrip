@@ -3,3 +3,4 @@
 #define LED_PIN GPIO_NUM_13
 #define LED_MODE GRB
 #define LED_COUNT 50
+#define INTERFRAME_DELAY 50

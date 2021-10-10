@@ -1,5 +1,5 @@
 #include "LEDManager.hpp"
-#include "modes.cpp"
+#include "modes.hpp"
 #include "config.hpp"
 
 LEDManager::LEDManager() {
@@ -9,4 +9,6 @@ LEDManager::LEDManager() {
 
 void LEDManager::tick() {
     modes[0](leds, LED_COUNT);
+    FastLED.show();
+    delay(INTERFRAME_DELAY);
 }
