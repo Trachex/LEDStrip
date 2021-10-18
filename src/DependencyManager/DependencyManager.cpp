@@ -8,3 +8,10 @@ LEDManager& DependencyManager::getLEDManager() {
     }
     return *ledManager;
 }
+
+StateManager& DependencyManager::getStateManager() {
+    if (stateManager == nullptr) {
+        stateManager = new StateManager();
+    }
+    return *stateManager;
+}
