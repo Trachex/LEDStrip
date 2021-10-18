@@ -1,20 +1,20 @@
 #include <Arduino.h>
-#include "LEDManager/LEDManager.hpp"
+#include "DependencyManager/DependencyManager.hpp"
 
 class Tape {
 	public:
 		Tape();
 		void tick();
 	private:
-		LEDManager* ledManager;
+		LEDManager& ledManager;
 };
 
-Tape::Tape() {
-	ledManager = new LEDManager();
+Tape::Tape() : ledManager(dependencyManager.getLEDManager()) {
+
 }
 
 void Tape::tick() {
-	ledManager->tick();
+	ledManager.tick();
 }
 
 Tape* api;
