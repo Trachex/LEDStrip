@@ -4,12 +4,12 @@
 #include "config.hpp"
 
 LEDManager::LEDManager() : stateManager(dependencyManager.getStateManager()) {
-    leds = new CRGB[stateManager.state.ledCount];
-    FastLED.addLeds<LED_TYPE, LED_PIN, LED_MODE>(leds, stateManager.state.ledCount);
+    leds = new CRGB[stateManager.state.mode.ledCount];
+    FastLED.addLeds<LED_TYPE, LED_PIN, LED_MODE>(leds, stateManager.state.mode.ledCount);
 }
 
 void LEDManager::tick() {
-    modes[stateManager.state.mode](leds, stateManager.state.ledCount);
+    modes[stateManager.state.mode.currMode](leds, stateManager.state.mode.ledCount);
     FastLED.show();
-    delay(stateManager.state.delay);
+    delay(stateManager.state.mode.delay);
 }
