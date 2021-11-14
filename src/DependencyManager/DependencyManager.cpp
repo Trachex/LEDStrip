@@ -15,3 +15,10 @@ StateManager& DependencyManager::getStateManager() {
     }
     return *stateManager;
 }
+
+WifiManager& DependencyManager::getWifiManager() {
+    if (wifiManager == nullptr) {
+        wifiManager = new WifiManager();
+    }
+    return *wifiManager;
+}
