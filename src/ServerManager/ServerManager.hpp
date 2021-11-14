@@ -1,5 +1,6 @@
 #pragma once
 
+#include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 #include "StateManager/StateManager.hpp"
 #include "DependencyManager/DependencyManager.hpp"
@@ -11,6 +12,7 @@ class ServerManager {
         ServerManager();
         void run();
     private:
+        fs::SPIFFSFS& spiffs;
         StateManager& stateManager;
         AsyncWebServer webServer;
         WifiManager& wifiManager;

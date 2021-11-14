@@ -2,6 +2,14 @@
 
 DependencyManager dependencyManager;
 
+fs::SPIFFSFS& DependencyManager::getSPIFFS() {
+    if (spiffs == nullptr) {
+        SPIFFS.begin();
+        spiffs = &SPIFFS;
+    }
+    return *spiffs;
+}
+
 LEDManager& DependencyManager::getLEDManager() {
     if (ledManager == nullptr) {
         ledManager = new LEDManager();
