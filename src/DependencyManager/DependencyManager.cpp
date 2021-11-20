@@ -10,6 +10,13 @@ fs::SPIFFSFS& DependencyManager::getSPIFFS() {
     return *spiffs;
 }
 
+NVSManager& DependencyManager::getNVSManager() {
+    if (nvsManager == nullptr) {
+        nvsManager = new NVSManager();
+    }
+    return *nvsManager;
+}
+
 LEDManager& DependencyManager::getLEDManager() {
     if (ledManager == nullptr) {
         ledManager = new LEDManager();

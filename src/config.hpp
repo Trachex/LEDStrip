@@ -6,5 +6,5 @@
 #define DEFAULT_DELAY 50
 
 // Wi Fi
-#define SSID "LEDTape"
-#define PASS "admin"
+#define DEFAULT_SSID "LEDTape"
+#define DEFAULT_PASS "admin"
