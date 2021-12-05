@@ -9,7 +9,7 @@ WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
     connect(stateManager.state.wifi.workSsid.c_str(), stateManager.state.wifi.workPass.c_str());
 }
 
-void WifiManager::connect(const char* ssid, const char* password) {
+std::string WifiManager::connect(const char* ssid, const char* password) {
     if (strlen(ssid) == 0 || strlen(password) == 0 ) return;
 
     WiFi.begin(ssid, password);
@@ -24,5 +24,9 @@ void WifiManager::connect(const char* ssid, const char* password) {
     if (WiFi.status() == WL_CONNECTED) {
         std::string ip = std::string(WiFi.localIP().toString().c_str());
         stateManager.state.wifi.workIP = ip;
-    } 
+
+        return ip;
+    }
+
+    return "Error";
 }

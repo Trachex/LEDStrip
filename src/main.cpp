@@ -10,7 +10,7 @@ class Tape {
 };
 
 Tape::Tape() : ledManager(dependencyManager.getLEDManager()) {
-
+	dependencyManager.getServerManager().run();
 }
 
 void Tape::tick() {

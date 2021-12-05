@@ -5,6 +5,7 @@
 #include "StateManager/StateManager.hpp"
 #include "WifiManager/WifiManager.hpp"
 #include "NVSManager/NVSManager.hpp"
+#include "ServerManager/ServerManager.hpp"
 
 class DependencyManager {
     public:
@@ -13,12 +14,14 @@ class DependencyManager {
         StateManager& getStateManager();
         WifiManager& getWifiManager();
         NVSManager& getNVSManager();
+        ServerManager& getServerManager();
     private:
         fs::SPIFFSFS* spiffs = nullptr;
         LEDManager* ledManager = nullptr;
         StateManager* stateManager = nullptr;
         WifiManager* wifiManager = nullptr;
         NVSManager* nvsManager = nullptr;
+        ServerManager* serverManager = nullptr;
 };
 
 extern DependencyManager dependencyManager;

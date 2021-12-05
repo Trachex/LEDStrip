@@ -7,7 +7,7 @@
 class WifiManager {
     public:
         WifiManager();
-        void connect(const char* ssid, const char* password);
+        std::string connect(const char* ssid, const char* password);
     private:
         StateManager& stateManager;
 };

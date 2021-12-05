@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ArduinoJson.h>
+#include <AsyncJson.h>
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 #include "StateManager/StateManager.hpp"

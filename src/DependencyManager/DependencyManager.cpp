@@ -37,3 +37,10 @@ WifiManager& DependencyManager::getWifiManager() {
     }
     return *wifiManager;
 }
+
+ServerManager& DependencyManager::getServerManager() {
+    if (serverManager == nullptr) {
+        serverManager = new ServerManager();
+    }
+    return *serverManager;
+}
