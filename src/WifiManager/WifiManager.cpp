@@ -12,6 +12,8 @@ WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
 std::string WifiManager::connect(const char* ssid, const char* password) {
     if (strlen(ssid) == 0 || strlen(password) == 0 ) return "Error";
 
+    Serial.println("Connecting");
+
     WiFi.begin(ssid, password);
 
     int retries = 3;
@@ -22,11 +24,19 @@ std::string WifiManager::connect(const char* ssid, const char* password) {
     }
 
     if (WiFi.status() == WL_CONNECTED) {
+        Serial.println("Connected!");
         std::string ip = std::string(WiFi.localIP().toString().c_str());
         stateManager.state.wifi.workIP = ip;
+
+        Serial.println(ip.c_str());
 
         return ip;
     }
 
     return "Error";
+}
+
+std::string WifiManager::getMac() {
+    Serial.println(WiFi.macAddress());
+    return std::string(WiFi.macAddress().c_str());
 }

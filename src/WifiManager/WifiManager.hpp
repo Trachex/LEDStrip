@@ -7,6 +7,7 @@
 class WifiManager {
     public:
         WifiManager();
+        std::string getMac();
         std::string connect(const char* ssid, const char* password);
     private:
         StateManager& stateManager;

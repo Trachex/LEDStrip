@@ -8,6 +8,8 @@ ServerManager::ServerManager() :
     wifiManager(dependencyManager.getWifiManager()) {
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
+        Serial.println(request->url());
+
         request->send(spiffs, request->url());
     });
 
@@ -15,6 +17,9 @@ ServerManager::ServerManager() :
 
         std::string workSsid = json["workSsid"];
         std::string workPass = json["workPass"];
+
+        Serial.println(workSsid.c_str());
+        Serial.println(workPass.c_str());
 
         stateManager.state.wifi.workSsid = workSsid;
         stateManager.state.wifi.workPass = workPass;
@@ -26,6 +31,7 @@ ServerManager::ServerManager() :
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
         resp["ip"] = ip;
+        resp["mac"] = wifiManager.getMac();
         serializeJson(resp, *response);
         request->send(response);
     });
