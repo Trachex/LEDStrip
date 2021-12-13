@@ -2,7 +2,6 @@
 
 #include "State.hpp"
 #include "NVSManager/NVSManager.hpp"
-#include "DependencyManager/DependencyManager.hpp"
 
 class StateManager {
     public:

@@ -5,7 +5,6 @@
 #include <SPIFFS.h>
 #include <ESPAsyncWebServer.h>
 #include "StateManager/StateManager.hpp"
-#include "DependencyManager/DependencyManager.hpp"
 #include "WifiManager/WifiManager.hpp"
 #include "config.hpp"
 

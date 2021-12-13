@@ -1,7 +1,7 @@
 #include "LEDManager.hpp"
-#include "DependencyManager/DependencyManager.hpp"
 #include "modes.hpp"
 #include "config.hpp"
+#include "DependencyManager/DependencyManager.hpp"
 
 LEDManager::LEDManager() : stateManager(dependencyManager.getStateManager()) {
     leds = new CRGB[stateManager.state.mode.ledCount];

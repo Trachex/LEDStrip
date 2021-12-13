@@ -10,7 +10,7 @@ WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
 }
 
 std::string WifiManager::connect(const char* ssid, const char* password) {
-    if (strlen(ssid) == 0 || strlen(password) == 0 ) return;
+    if (strlen(ssid) == 0 || strlen(password) == 0 ) return "Error";
 
     WiFi.begin(ssid, password);
 

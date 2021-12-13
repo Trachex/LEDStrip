@@ -2,6 +2,13 @@
 
 DependencyManager dependencyManager;
 
+NVSManager& DependencyManager::getNVSManager() {
+    if (nvsManager == nullptr) {
+        nvsManager = new NVSManager();
+    }
+    return *nvsManager;
+}
+
 fs::SPIFFSFS& DependencyManager::getSPIFFS() {
     if (spiffs == nullptr) {
         SPIFFS.begin();
@@ -10,18 +17,11 @@ fs::SPIFFSFS& DependencyManager::getSPIFFS() {
     return *spiffs;
 }
 
-NVSManager& DependencyManager::getNVSManager() {
-    if (nvsManager == nullptr) {
-        nvsManager = new NVSManager();
+WifiManager& DependencyManager::getWifiManager() {
+    if (wifiManager == nullptr) {
+        wifiManager = new WifiManager();
     }
-    return *nvsManager;
-}
-
-LEDManager& DependencyManager::getLEDManager() {
-    if (ledManager == nullptr) {
-        ledManager = new LEDManager();
-    }
-    return *ledManager;
+    return *wifiManager;
 }
 
 StateManager& DependencyManager::getStateManager() {
@@ -31,11 +31,11 @@ StateManager& DependencyManager::getStateManager() {
     return *stateManager;
 }
 
-WifiManager& DependencyManager::getWifiManager() {
-    if (wifiManager == nullptr) {
-        wifiManager = new WifiManager();
+LEDManager& DependencyManager::getLEDManager() {
+    if (ledManager == nullptr) {
+        ledManager = new LEDManager();
     }
-    return *wifiManager;
+    return *ledManager;
 }
 
 ServerManager& DependencyManager::getServerManager() {

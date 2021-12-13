@@ -1,10 +1,11 @@
 #include "ServerManager.hpp"
+#include "DependencyManager/DependencyManager.hpp"
 
 ServerManager::ServerManager() : 
-    stateManager(dependencyManager.getStateManager()),
-    wifiManager(dependencyManager.getWifiManager()),
     spiffs(dependencyManager.getSPIFFS()),
-    webServer(80) {
+    stateManager(dependencyManager.getStateManager()),
+    webServer(80),
+    wifiManager(dependencyManager.getWifiManager()) {
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
         request->send(spiffs, request->url());

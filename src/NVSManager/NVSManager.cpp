@@ -20,7 +20,7 @@ State NVSManager::readState() {
     state.mode.ledCount = NVS.getInt(LED_COUNT);
 
     state.wifi.ssid = std::string(NVS.getString(SSID).c_str());
-    state.wifi.pass =std::string( NVS.getString(PASS).c_str());
+    state.wifi.pass = std::string(NVS.getString(PASS).c_str());
     state.wifi.workSsid = std::string(NVS.getString(WORK_SSID).c_str());
     state.wifi.workPass = std::string(NVS.getString(WORK_PASS).c_str());
     state.wifi.workIP = std::string(NVS.getString(WORK_IP).c_str());

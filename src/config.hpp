@@ -7,4 +7,4 @@
 
 // Wi Fi
 #define DEFAULT_SSID "LEDTape"
-#define DEFAULT_PASS "admin"
+#define DEFAULT_PASS "admin678"

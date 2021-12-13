@@ -1,5 +1,6 @@
 #include "StateManager.hpp"
 #include "config.hpp"
+#include "DependencyManager/DependencyManager.hpp"
 
 StateManager::StateManager() : nvsManager(dependencyManager.getNVSManager()) {
     state = nvsManager.readState();
