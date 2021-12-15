@@ -33,6 +33,8 @@ std::string WifiManager::connect(const char* ssid, const char* password) {
         return ip;
     }
 
+    Serial.println("Connection Failed");
+
     return "Error";
 }
 
