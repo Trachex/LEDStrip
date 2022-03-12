@@ -12,8 +12,10 @@ struct WifiState {
 
 struct ModeState {
     int currMode;
+    int modeAmount;
     int delay;
     int ledCount;
+    int brightness;
 };
 
 struct State {

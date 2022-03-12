@@ -4,6 +4,7 @@
 #define CURR_MODE "currMode"
 #define DELAY "delay"
 #define LED_COUNT "ledCount"
+#define BRIGHTNESS "brightness"
 
 #define SSID "ssid"
 #define PASS "pass"
@@ -18,6 +19,7 @@ State NVSManager::readState() {
     state.mode.currMode = NVS.getInt(CURR_MODE);
     state.mode.delay = NVS.getInt(DELAY);
     state.mode.ledCount = NVS.getInt(LED_COUNT);
+    state.mode.brightness = NVS.getInt(BRIGHTNESS);
 
     state.wifi.ssid = std::string(NVS.getString(SSID).c_str());
     state.wifi.pass = std::string(NVS.getString(PASS).c_str());
@@ -34,6 +36,7 @@ void NVSManager::writeState(State state) {
     if (currentState.mode.currMode != state.mode.currMode) NVS.setInt(CURR_MODE, state.mode.currMode);
     if (currentState.mode.delay != state.mode.delay) NVS.setInt(DELAY, state.mode.delay);
     if (currentState.mode.ledCount != state.mode.ledCount) NVS.setInt(LED_COUNT, state.mode.ledCount);
+    if (currentState.mode.brightness != state.mode.brightness) NVS.setInt(BRIGHTNESS, state.mode.brightness);
 
     if (currentState.wifi.ssid != state.wifi.ssid) NVS.setString(SSID, String(state.wifi.ssid.c_str()));
     if (currentState.wifi.pass != state.wifi.pass) NVS.setString(PASS, String(state.wifi.pass.c_str()));

@@ -13,6 +13,104 @@ ServerManager::ServerManager() :
         request->send(spiffs, request->url());
     });
 
+    AsyncCallbackJsonWebHandler* ledAmount = new AsyncCallbackJsonWebHandler("/led/amount", [this](AsyncWebServerRequest *request, JsonVariant &json) {
+
+        int amount = json["amount"];
+
+        Serial.println(amount);
+
+        stateManager.state.mode.ledCount = amount;
+
+        stateManager.storeState();
+
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        DynamicJsonDocument resp(1024);
+        resp["status"] = "ok";
+        serializeJson(resp, *response);
+        request->send(response);
+    });
+
+    AsyncCallbackJsonWebHandler* ledDelay = new AsyncCallbackJsonWebHandler("/led/delay", [this](AsyncWebServerRequest *request, JsonVariant &json) {
+
+        int delay = json["delay"];
+
+        Serial.println(delay);
+
+        if(delay < 1 || delay > 60) {
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            DynamicJsonDocument resp(1024);
+            resp["status"] = "error";
+            resp["description"] = "Invaid delay, must be within range 1 to 60";
+            serializeJson(resp, *response);
+            request->send(response);
+            return;
+        }
+
+        stateManager.state.mode.delay = delay;
+
+        stateManager.storeState();
+
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        DynamicJsonDocument resp(1024);
+        resp["status"] = "ok";
+        serializeJson(resp, *response);
+        request->send(response);
+    });
+
+    AsyncCallbackJsonWebHandler* ledBrightness = new AsyncCallbackJsonWebHandler("/led/brightness", [this](AsyncWebServerRequest *request, JsonVariant &json) {
+
+        int brightness = json["brightness"];
+
+        Serial.println(brightness);
+
+        if(brightness < 1 || brightness > 100) {
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            DynamicJsonDocument resp(1024);
+            resp["status"] = "error";
+            resp["description"] = "Invaid brightness, must be within range 1 to 100";
+            serializeJson(resp, *response);
+            request->send(response);
+            return;
+        }
+
+        stateManager.state.mode.brightness = brightness;
+
+        stateManager.storeState();
+
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        DynamicJsonDocument resp(1024);
+        resp["status"] = "ok";
+        serializeJson(resp, *response);
+        request->send(response);
+    });
+
+    AsyncCallbackJsonWebHandler* ledMode = new AsyncCallbackJsonWebHandler("/led/mode", [this](AsyncWebServerRequest *request, JsonVariant &json) {
+
+        int mode = json["mode"];
+
+        Serial.println(mode);
+
+        if(mode < 0 || mode > stateManager.state.mode.modeAmount -1) {
+            AsyncResponseStream *response = request->beginResponseStream("application/json");
+            DynamicJsonDocument resp(1024);
+            resp["status"] = "error";
+            resp["description"] = "Invaid brightness, must be within range 0 to " + stateManager.state.mode.modeAmount -1;
+            serializeJson(resp, *response);
+            request->send(response);
+            return;
+        }
+
+        stateManager.state.mode.currMode = mode;
+
+        stateManager.storeState();
+
+        AsyncResponseStream *response = request->beginResponseStream("application/json");
+        DynamicJsonDocument resp(1024);
+        resp["status"] = "ok";
+        serializeJson(resp, *response);
+        request->send(response);
+    });
+
     AsyncCallbackJsonWebHandler* wifiConnect = new AsyncCallbackJsonWebHandler("/wifi/connect", [this](AsyncWebServerRequest *request, JsonVariant &json) {
 
         std::string workSsid = json["workSsid"];
@@ -36,6 +134,7 @@ ServerManager::ServerManager() :
         request->send(response);
     });
 
+    webServer.addHandler(ledAmount);
     webServer.addHandler(wifiConnect);
 }
 
