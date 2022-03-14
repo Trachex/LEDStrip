@@ -25,7 +25,7 @@ std::string WifiManager::connect(const char* ssid, const char* password) {
 
     if (WiFi.status() == WL_CONNECTED) {
         Serial.println("Connected!");
-        std::string ip = std::string(WiFi.localIP().toString().c_str());
+        string ip = WiFi.localIP().toString();
         stateManager.state.wifi.workIP = ip;
 
         Serial.println(ip.c_str());

@@ -1,13 +1,9 @@
 #pragma once
 
-#include "string"
+#include "utils/string.hpp"
 
 struct WifiState {
-    std::string ssid;
-    std::string pass;
-    std::string workSsid;
-    std::string workPass;
-    std::string workIP;
+    string ssid, pass, workSsid, workPass, workIP;
 };
 
 struct ModeState {

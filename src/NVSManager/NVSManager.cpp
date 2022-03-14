@@ -21,11 +21,11 @@ State NVSManager::readState() {
     state.mode.ledCount = NVS.getInt(LED_COUNT);
     state.mode.brightness = NVS.getInt(BRIGHTNESS);
 
-    state.wifi.ssid = std::string(NVS.getString(SSID).c_str());
-    state.wifi.pass = std::string(NVS.getString(PASS).c_str());
-    state.wifi.workSsid = std::string(NVS.getString(WORK_SSID).c_str());
-    state.wifi.workPass = std::string(NVS.getString(WORK_PASS).c_str());
-    state.wifi.workIP = std::string(NVS.getString(WORK_IP).c_str());
+    state.wifi.ssid = NVS.getString(SSID);
+    state.wifi.pass = NVS.getString(PASS);
+    state.wifi.workSsid = NVS.getString(WORK_SSID);
+    state.wifi.workPass = NVS.getString(WORK_PASS);
+    state.wifi.workIP = NVS.getString(WORK_IP);
 
     currentState = state;
 
@@ -38,11 +38,11 @@ void NVSManager::writeState(State state) {
     if (currentState.mode.ledCount != state.mode.ledCount) NVS.setInt(LED_COUNT, state.mode.ledCount);
     if (currentState.mode.brightness != state.mode.brightness) NVS.setInt(BRIGHTNESS, state.mode.brightness);
 
-    if (currentState.wifi.ssid != state.wifi.ssid) NVS.setString(SSID, String(state.wifi.ssid.c_str()));
-    if (currentState.wifi.pass != state.wifi.pass) NVS.setString(PASS, String(state.wifi.pass.c_str()));
-    if (currentState.wifi.workSsid != state.wifi.workSsid) NVS.setString(WORK_SSID, String(state.wifi.workSsid.c_str()));
-    if (currentState.wifi.workPass != state.wifi.workPass) NVS.setString(WORK_PASS, String(state.wifi.workPass.c_str()));
-    if (currentState.wifi.workIP != state.wifi.workIP) NVS.setString(WORK_IP, String(state.wifi.workIP.c_str()));
+    if (currentState.wifi.ssid != state.wifi.ssid) NVS.setString(SSID, String(state.wifi.ssid.toArduinoString()));
+    if (currentState.wifi.pass != state.wifi.pass) NVS.setString(PASS, String(state.wifi.pass.toArduinoString()));
+    if (currentState.wifi.workSsid != state.wifi.workSsid) NVS.setString(WORK_SSID, String(state.wifi.workSsid.toArduinoString()));
+    if (currentState.wifi.workPass != state.wifi.workPass) NVS.setString(WORK_PASS, String(state.wifi.workPass.toArduinoString()));
+    if (currentState.wifi.workIP != state.wifi.workIP) NVS.setString(WORK_IP, String(state.wifi.workIP.toArduinoString()));
 
     currentState = state;
 }
