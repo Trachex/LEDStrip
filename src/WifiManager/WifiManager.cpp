@@ -1,5 +1,8 @@
 #include "WifiManager.hpp"
 #include "DependencyManager/DependencyManager.hpp"
+#include "utils/log.hpp"
+
+Logger* logger = new Logger("WifiManager");
 
 WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
     WiFi.disconnect();
@@ -12,33 +15,34 @@ WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
 std::string WifiManager::connect(const char* ssid, const char* password) {
     if (strlen(ssid) == 0 || strlen(password) == 0 ) return "Error";
 
-    Serial.println("Connecting");
+    logger->logln("Connecting");
 
     WiFi.begin(ssid, password);
 
-    int retries = 3;
+    int timeout = 3;
 
-    while (WiFi.status() != WL_CONNECTED && retries > 0) {
+    while (WiFi.status() != WL_CONNECTED && timeout > 0) {
+        logger->logln(".");
         delay(100);
-        retries--;
+        timeout--;
     }
 
     if (WiFi.status() == WL_CONNECTED) {
-        Serial.println("Connected!");
+        logger->logln("Connected!");
         string ip = WiFi.localIP().toString();
         stateManager.state.wifi.workIP = ip;
 
-        Serial.println(ip.c_str());
+        logger->logln(ip);
 
         return ip;
     }
 
-    Serial.println("Connection Failed");
+    logger->logln("Connection Failed");
 
     return "Error";
 }
 
 std::string WifiManager::getMac() {
-    Serial.println(WiFi.macAddress());
+    logger->logln(WiFi.macAddress());
     return std::string(WiFi.macAddress().c_str());
 }

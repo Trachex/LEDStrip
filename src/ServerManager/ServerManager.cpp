@@ -1,5 +1,8 @@
 #include "ServerManager.hpp"
 #include "DependencyManager/DependencyManager.hpp"
+#include "utils/log.hpp"
+
+Logger* logger = new Logger("ServerManager");
 
 ServerManager::ServerManager() : 
     spiffs(dependencyManager.getSPIFFS()),
@@ -17,7 +20,7 @@ ServerManager::ServerManager() :
 
         int amount = json["amount"];
 
-        Serial.println(amount);
+        logger->logln(amount);
 
         stateManager.state.mode.ledCount = amount;
 
@@ -34,7 +37,7 @@ ServerManager::ServerManager() :
 
         int delay = json["delay"];
 
-        Serial.println(delay);
+        logger->logln(delay);
 
         if(delay < 1 || delay > 60) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -61,7 +64,7 @@ ServerManager::ServerManager() :
 
         int brightness = json["brightness"];
 
-        Serial.println(brightness);
+        logger->logln(brightness);
 
         if(brightness < 1 || brightness > 100) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -88,7 +91,7 @@ ServerManager::ServerManager() :
 
         int mode = json["mode"];
 
-        Serial.println(mode);
+        logger->logln(mode);
 
         if(mode < 0 || mode > stateManager.state.mode.modeAmount -1) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -116,8 +119,8 @@ ServerManager::ServerManager() :
         std::string workSsid = json["workSsid"];
         std::string workPass = json["workPass"];
 
-        Serial.println(workSsid.c_str());
-        Serial.println(workPass.c_str());
+        logger->logln(workSsid);
+        logger->logln(workPass);
 
         stateManager.state.wifi.workSsid = workSsid;
         stateManager.state.wifi.workPass = workPass;
@@ -136,8 +139,12 @@ ServerManager::ServerManager() :
 
     webServer.addHandler(ledAmount);
     webServer.addHandler(wifiConnect);
+    webServer.addHandler(ledDelay);
+    webServer.addHandler(ledBrightness);
+    webServer.addHandler(ledMode);
 }
 
 void ServerManager::run() {
     webServer.begin();
+    logger->logln("Server started");
 }

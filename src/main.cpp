@@ -11,7 +11,6 @@ class Tape {
 
 Tape::Tape() : ledManager(dependencyManager.getLEDManager()) {
 	dependencyManager.getServerManager().run();
-	Serial.println("Server Started");
 }
 
 void Tape::tick() {
