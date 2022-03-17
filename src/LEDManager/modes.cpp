@@ -1,6 +1,6 @@
 #include "modes.hpp"
 
-void rainbow(CRGB* leds, int ledCount) {
+void rainbow(CRGB* leds, ModeState state) {
     static int r = 255;
     static int g = 0;
     static int b = 0;
@@ -20,9 +20,10 @@ void rainbow(CRGB* leds, int ledCount) {
         r++;
     }
 
-    for(int i = 0; i < ledCount; i++) {
+    for(int i = 0; i < state.ledCount; i++) {
         leds[i] = CRGB(r, g, b);
     }
 }
 
 modeArr modes[] = { rainbow };
+int modeAmount = 1;

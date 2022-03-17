@@ -1,11 +1,11 @@
 #pragma once
 
 #include <FastLED.h>
+#include "StateManager/State.hpp"
 
-typedef void (*modeArr) (CRGB* leds, int ledCount);
+typedef void (*modeArr) (CRGB* leds, ModeState state);
 
-void rainbow(CRGB* leds, int ledCount);
+void rainbow(CRGB* leds, ModeState state);
 
 extern modeArr modes[];
-
-const int amount = 1;
+extern int modeAmount;

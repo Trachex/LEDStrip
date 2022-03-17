@@ -2,6 +2,7 @@
 
 #include "State.hpp"
 #include "NVSManager/NVSManager.hpp"
+#include "utils/string.hpp"
 
 class StateManager {
     public:
@@ -17,10 +18,12 @@ class StateManager {
         int getLedCount();
         int getMode();
         int getDelay();
+        int getBrightness();
         string getSSID();
         string getPass();
         string getWorkSSID();
         string getWorkPass();
+        ModeState getModeState();
     private:
         State state;
         void storeState();

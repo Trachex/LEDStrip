@@ -4,6 +4,7 @@
 #define LED_MODE GRB
 #define LED_DEFAULT_COUNT 50
 #define DEFAULT_DELAY 50
+#define DEFAULT_BRIGHTNESS 255
 
 // Wi Fi
 #define DEFAULT_SSID "LEDTape"

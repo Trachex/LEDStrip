@@ -59,11 +59,11 @@ ServerManager::ServerManager() :
 
         logger->logln(brightness);
 
-        if(brightness < 1 || brightness > 100) {
+        if(brightness < 1 || brightness > 255) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
             DynamicJsonDocument resp(1024);
             resp["status"] = "error";
-            resp["description"] = "Invaid brightness, must be within range 1 to 100";
+            resp["description"] = "Invaid brightness, must be within range 1 to 255";
             serializeJson(resp, *response);
             request->send(response);
             return;

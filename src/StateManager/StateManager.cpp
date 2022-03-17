@@ -7,6 +7,7 @@ StateManager::StateManager() : nvsManager(dependencyManager.getNVSManager()) {
 
     if (state.mode.ledCount == 0) state.mode.ledCount = LED_DEFAULT_COUNT;
     if (state.mode.delay == 0) state.mode.delay = DEFAULT_DELAY;
+    if (state.mode.brightness == 0) state.mode.brightness = DEFAULT_BRIGHTNESS;
     
     if (state.wifi.ssid == "") state.wifi.ssid = DEFAULT_SSID;
     if (state.wifi.pass == "") state.wifi.pass = DEFAULT_PASS;
@@ -70,6 +71,10 @@ int StateManager::getDelay() {
     return state.mode.delay;
 }
 
+int StateManager::getBrightness() {
+    return state.mode.brightness;
+}
+
 string StateManager::getSSID() {
     return state.wifi.ssid;
 }
@@ -84,4 +89,8 @@ string StateManager::getWorkSSID() {
 
 string StateManager::getWorkPass() {
     return state.wifi.workPass;
+}
+
+ModeState StateManager::getModeState() {
+    return state.mode;
 }

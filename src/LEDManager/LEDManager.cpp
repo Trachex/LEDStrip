@@ -8,11 +8,12 @@ using namespace std;
 LEDManager::LEDManager() : stateManager(dependencyManager.getStateManager()) {
     leds = new CRGB[stateManager.getLedCount()];
     FastLED.addLeds<LED_TYPE, LED_PIN, LED_MODE>(leds, stateManager.getLedCount());
-    stateManager.setModeAmount(amount);
+    stateManager.setModeAmount(modeAmount);
 }
 
 void LEDManager::tick() {
-    modes[stateManager.getMode()](leds, stateManager.getLedCount());
+    modes[stateManager.getMode()](leds, stateManager.getModeState());
+    FastLED.setBrightness(stateManager.getBrightness());
     FastLED.show();
     delay(stateManager.getDelay());
 }
