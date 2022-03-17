@@ -21,7 +21,9 @@ void rainbow(CRGB* leds, ModeState state) {
     }
 
     for(int i = 0; i < state.ledCount; i++) {
-        leds[i] = CRGB(r, g, b);
+        CHSV tmp = rgb2hsv_approximate(CRGB(r, g, b));
+        tmp.v = state.brightness;
+        leds[i] = tmp; 
     }
 }
 

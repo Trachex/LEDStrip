@@ -13,7 +13,6 @@ LEDManager::LEDManager() : stateManager(dependencyManager.getStateManager()) {
 
 void LEDManager::tick() {
     modes[stateManager.getMode()](leds, stateManager.getModeState());
-    FastLED.setBrightness(stateManager.getBrightness());
     FastLED.show();
     delay(stateManager.getDelay());
 }
