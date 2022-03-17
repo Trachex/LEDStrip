@@ -7,9 +7,9 @@ Logger* logger = new Logger("WifiManager");
 WifiManager::WifiManager() : stateManager(dependencyManager.getStateManager()) {
     WiFi.disconnect();
     WiFi.mode(WIFI_AP_STA);
-    WiFi.softAP(stateManager.state.wifi.ssid.c_str(), stateManager.state.wifi.pass.c_str());
+    WiFi.softAP(stateManager.getSSID().c_str(), stateManager.getPass().c_str());
 
-    connect(stateManager.state.wifi.workSsid.c_str(), stateManager.state.wifi.workPass.c_str());
+    connect(stateManager.getWorkSSID().c_str(), stateManager.getWorkPass().c_str());
 }
 
 std::string WifiManager::connect(const char* ssid, const char* password) {
@@ -30,7 +30,7 @@ std::string WifiManager::connect(const char* ssid, const char* password) {
     if (WiFi.status() == WL_CONNECTED) {
         logger->logln("Connected!");
         string ip = WiFi.localIP().toString();
-        stateManager.state.wifi.workIP = ip;
+        stateManager.setWorkIp(ip);
 
         logger->logln(ip);
 

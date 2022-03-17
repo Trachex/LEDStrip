@@ -17,3 +17,71 @@ StateManager::StateManager() : nvsManager(dependencyManager.getNVSManager()) {
 void StateManager::storeState() {
     nvsManager.writeState(state);
 }
+
+void StateManager::setAmount(int amount) {
+    state.mode.ledCount = amount;
+    storeState();
+}
+
+void StateManager::setDelay(int delay) {
+    state.mode.delay = delay;
+    storeState();
+}
+
+void StateManager::setBrightness(int brightness) {
+    state.mode.brightness = brightness;
+    storeState();
+}
+
+void StateManager::setMode(int mode) {
+    state.mode.currMode = mode;
+    storeState();
+}
+
+void StateManager::setModeAmount(int amount) {
+    state.mode.modeAmount = amount;
+    storeState();
+}
+
+void StateManager::setWorkStation(string workSsid, string workPass) {
+    state.wifi.workSsid = workSsid;
+    state.wifi.workPass = workPass;
+    storeState();
+}
+
+void StateManager::setWorkIp(string ip) {
+    state.wifi.workIP = ip;
+    storeState();
+}
+
+int StateManager::getModeAmount() {
+    return state.mode.modeAmount;
+}
+
+int StateManager::getLedCount() {
+    return state.mode.ledCount;
+}
+
+int StateManager::getMode() {
+    return state.mode.currMode;
+}
+
+int StateManager::getDelay() {
+    return state.mode.delay;
+}
+
+string StateManager::getSSID() {
+    return state.wifi.ssid;
+}
+
+string StateManager::getPass() {
+    return state.wifi.pass;
+}
+
+string StateManager::getWorkSSID() {
+    return state.wifi.workSsid;
+}
+
+string StateManager::getWorkPass() {
+    return state.wifi.workPass;
+}

@@ -17,14 +17,11 @@ ServerManager::ServerManager() :
     });
 
     AsyncCallbackJsonWebHandler* ledAmount = new AsyncCallbackJsonWebHandler("/led/amount", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-
         int amount = json["amount"];
 
         logger->logln(amount);
 
-        stateManager.state.mode.ledCount = amount;
-
-        stateManager.storeState();
+        stateManager.setAmount(amount);
 
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
@@ -34,7 +31,6 @@ ServerManager::ServerManager() :
     });
 
     AsyncCallbackJsonWebHandler* ledDelay = new AsyncCallbackJsonWebHandler("/led/delay", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-
         int delay = json["delay"];
 
         logger->logln(delay);
@@ -49,9 +45,7 @@ ServerManager::ServerManager() :
             return;
         }
 
-        stateManager.state.mode.delay = delay;
-
-        stateManager.storeState();
+        stateManager.setDelay(delay);
 
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
@@ -61,7 +55,6 @@ ServerManager::ServerManager() :
     });
 
     AsyncCallbackJsonWebHandler* ledBrightness = new AsyncCallbackJsonWebHandler("/led/brightness", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-
         int brightness = json["brightness"];
 
         logger->logln(brightness);
@@ -76,9 +69,7 @@ ServerManager::ServerManager() :
             return;
         }
 
-        stateManager.state.mode.brightness = brightness;
-
-        stateManager.storeState();
+        stateManager.setBrightness(brightness);
 
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
@@ -88,24 +79,23 @@ ServerManager::ServerManager() :
     });
 
     AsyncCallbackJsonWebHandler* ledMode = new AsyncCallbackJsonWebHandler("/led/mode", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-
         int mode = json["mode"];
 
         logger->logln(mode);
 
-        if(mode < 0 || mode > stateManager.state.mode.modeAmount -1) {
+        int modeAmount = stateManager.getModeAmount();
+
+        if(mode < 0 || mode > modeAmount -1) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
             DynamicJsonDocument resp(1024);
             resp["status"] = "error";
-            resp["description"] = "Invaid brightness, must be within range 0 to " + stateManager.state.mode.modeAmount -1;
+            resp["description"] = "Invaid brightness, must be within range 0 to " + modeAmount -1;
             serializeJson(resp, *response);
             request->send(response);
             return;
         }
 
-        stateManager.state.mode.currMode = mode;
-
-        stateManager.storeState();
+        stateManager.setMode(mode);
 
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
@@ -115,17 +105,13 @@ ServerManager::ServerManager() :
     });
 
     AsyncCallbackJsonWebHandler* wifiConnect = new AsyncCallbackJsonWebHandler("/wifi/connect", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-
         std::string workSsid = json["workSsid"];
         std::string workPass = json["workPass"];
 
         logger->logln(workSsid);
         logger->logln(workPass);
 
-        stateManager.state.wifi.workSsid = workSsid;
-        stateManager.state.wifi.workPass = workPass;
-
-        stateManager.storeState();
+        stateManager.setWorkStation(workSsid, workPass);
 
         std::string ip = wifiManager.connect(workSsid.c_str(), workPass.c_str());
 

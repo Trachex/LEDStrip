@@ -7,11 +7,7 @@ struct WifiState {
 };
 
 struct ModeState {
-    int currMode;
-    int modeAmount;
-    int delay;
-    int ledCount;
-    int brightness;
+    int currMode, modeAmount, delay, ledCount, brightness;
 };
 
 struct State {
