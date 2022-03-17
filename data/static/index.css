@@ -1,0 +1,55 @@
+body {
+    background-color: antiquewhite;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 50%;
+    margin: 10px auto;
+}
+
+#form input {
+    margin: 10px;
+    background: inherit;
+    color: black;
+    font-size: 16px;
+    width: 80%;
+    border: none;
+    border-bottom: 1px solid black;
+    height: 7%;
+    outline: none;
+}
+
+#form input::placeholder {
+    color: black;
+    font-size: 16px;
+}
+
+#form button {
+    margin: 10px;
+    padding: 10px;
+    background-color: #df2359;
+    color: white;
+    border: none;
+    width: 25%;
+    height: 9%;
+    font-size: 14px;
+    text-transform: uppercase;
+    border-radius: 5px;
+}
+
+#form button:hover {
+    background-color: #b31d47;
+    cursor: pointer;
+}
+
+#form button:active {
+    background-color: #b31d47;
+}
+
+#ip, #mac {
+    text-align: center;
+}
