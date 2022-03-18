@@ -28,4 +28,4 @@ void rainbow(CRGB* leds, ModeState state) {
 }
 
 modeArr modes[] = { rainbow };
-int modeAmount = 1;
+int modeAmount = sizeof(modes) / sizeof(modes[0]);
