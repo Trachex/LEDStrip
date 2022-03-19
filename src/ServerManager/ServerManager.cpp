@@ -11,9 +11,29 @@ ServerManager::ServerManager() :
     wifiManager(dependencyManager.getWifiManager()) {
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
-        Serial.println(request->url());
-
+        logger->logln(request->url());
         request->send(spiffs, request->url());
+    });
+
+    webServer.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
+        logger->logln("index.html route");
+        request->send(spiffs, "/static/index.html");
+    });
+
+    webServer.on("/led/state", HTTP_GET, [this](AsyncWebServerRequest* request) {
+        StaticJsonDocument<256> json;
+        ModeState state = stateManager.getModeState();
+
+        json["mode"] = state.currMode;
+        json["brightness"] = state.brightness;
+        json["delay"] = state.delay;
+        json["ledCount"] = state.ledCount;
+
+        string jsonString;
+
+        serializeJson(json, (std::string&) jsonString);
+
+        request->send(200, "application/json", jsonString.c_str());
     });
 
     AsyncCallbackJsonWebHandler* ledAmount = new AsyncCallbackJsonWebHandler("/led/amount", [this](AsyncWebServerRequest *request, JsonVariant &json) {
