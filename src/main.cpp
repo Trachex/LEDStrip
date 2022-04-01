@@ -7,14 +7,16 @@ class Tape {
 		void tick();
 	private:
 		LEDManager& ledManager;
+		ServerManager& serverManager;
 };
 
-Tape::Tape() : ledManager(dependencyManager.getLEDManager()) {
-	dependencyManager.getServerManager().run();
+Tape::Tape() : ledManager(dependencyManager.getLEDManager()), serverManager(dependencyManager.getServerManager()) {
+	serverManager.run();
 }
 
 void Tape::tick() {
 	ledManager.tick();
+	serverManager.cleanupWs();
 }
 
 Tape* api;

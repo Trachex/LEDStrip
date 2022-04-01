@@ -8,6 +8,7 @@ ServerManager::ServerManager() :
     spiffs(dependencyManager.getSPIFFS()),
     stateManager(dependencyManager.getStateManager()),
     webServer(80),
+    ws("/ws"),
     wifiManager(dependencyManager.getWifiManager()) {
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
@@ -42,54 +43,6 @@ ServerManager::ServerManager() :
         logger->logln(amount);
 
         stateManager.setAmount(amount);
-
-        AsyncResponseStream *response = request->beginResponseStream("application/json");
-        DynamicJsonDocument resp(1024);
-        resp["status"] = "ok";
-        serializeJson(resp, *response);
-        request->send(response);
-    });
-
-    AsyncCallbackJsonWebHandler* ledDelay = new AsyncCallbackJsonWebHandler("/led/delay", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-        int delay = json["delay"];
-
-        logger->logln(delay);
-
-        if(delay < 1 || delay > 60) {
-            AsyncResponseStream *response = request->beginResponseStream("application/json");
-            DynamicJsonDocument resp(1024);
-            resp["status"] = "error";
-            resp["description"] = "Invaid delay, must be within range 1 to 60";
-            serializeJson(resp, *response);
-            request->send(response);
-            return;
-        }
-
-        stateManager.setDelay(delay);
-
-        AsyncResponseStream *response = request->beginResponseStream("application/json");
-        DynamicJsonDocument resp(1024);
-        resp["status"] = "ok";
-        serializeJson(resp, *response);
-        request->send(response);
-    });
-
-    AsyncCallbackJsonWebHandler* ledBrightness = new AsyncCallbackJsonWebHandler("/led/brightness", [this](AsyncWebServerRequest *request, JsonVariant &json) {
-        int brightness = json["brightness"];
-
-        logger->logln(brightness);
-
-        if(brightness < 1 || brightness > 255) {
-            AsyncResponseStream *response = request->beginResponseStream("application/json");
-            DynamicJsonDocument resp(1024);
-            resp["status"] = "error";
-            resp["description"] = "Invaid brightness, must be within range 1 to 255";
-            serializeJson(resp, *response);
-            request->send(response);
-            return;
-        }
-
-        stateManager.setBrightness(brightness);
 
         AsyncResponseStream *response = request->beginResponseStream("application/json");
         DynamicJsonDocument resp(1024);
@@ -143,14 +96,61 @@ ServerManager::ServerManager() :
         request->send(response);
     });
 
+    ws.onEvent([this] (AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
+        this->wsHandler(server, client, type, arg, data, len);
+    });
     webServer.addHandler(ledAmount);
     webServer.addHandler(wifiConnect);
-    webServer.addHandler(ledDelay);
-    webServer.addHandler(ledBrightness);
     webServer.addHandler(ledMode);
+    webServer.addHandler(&ws);
 }
 
 void ServerManager::run() {
     webServer.begin();
     logger->logln("Server started");
+}
+
+void ServerManager::cleanupWs() {
+    ws.cleanupClients();
+}
+
+void ServerManager::wsHandler(AsyncWebSocket * server, AsyncWebSocketClient * client, AwsEventType type, void * arg, uint8_t *data, size_t len) {
+    if(type == WS_EVT_CONNECT) {
+        logger->logln("WS Client connected");
+    } else if(type == WS_EVT_DISCONNECT) {
+        logger->logln("WS Client disconnected");
+    } else if(type == WS_EVT_DATA) {
+        AwsFrameInfo *info = (AwsFrameInfo*)arg;
+        if (info->final && info->index == 0 && info->len == len && info->opcode == WS_TEXT) {
+
+            const uint8_t size = JSON_OBJECT_SIZE(2);
+            StaticJsonDocument<size> json;
+            DeserializationError err = deserializeJson(json, data);
+            if (err) {
+                logger->logln("deserializeJson() failed with code ");
+                logger->logln(err.c_str());
+                return;
+            }
+
+            char *event = json["event"];
+            std::string value = json["value"];
+            logger->logln(event);
+            logger->logln(value);
+            if (strcmp(event, "delay") == 0) {
+                wsDelay(atoi(value.c_str()));
+            } else if (strcmp(event, "brightness") == 0) {
+                wsBrightness(atoi(value.c_str()));
+            }
+        }
+    }
+}
+
+void ServerManager::wsDelay(int delay) {
+    if(delay < 1 || delay > 60) return;
+    stateManager.setDelay(delay);
+}
+
+void ServerManager::wsBrightness(int brightness) {
+    if(brightness < 1 || brightness > 255) return;
+    stateManager.setBrightness(brightness);
 }
