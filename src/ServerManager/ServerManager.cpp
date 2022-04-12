@@ -2,6 +2,7 @@
 #include "DependencyManager/DependencyManager.hpp"
 #include "utils/log.hpp"
 
+#define CONTENT_TYPE_JSON "application/json"
 Logger* serverLogger = new Logger("ServerManager");
 
 ServerManager::ServerManager() : 
@@ -9,6 +10,11 @@ ServerManager::ServerManager() :
     stateManager(dependencyManager.getStateManager()),
     webServer(80),
     wifiManager(dependencyManager.getWifiManager()) {
+
+    webServer.on("/*", HTTP_OPTIONS, [this](AsyncWebServerRequest* request) {
+        AsyncWebServerResponse *response = request->beginResponse(204);
+        request->send(response);
+    });
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
         serverLogger->logln(request->url());
@@ -161,6 +167,9 @@ ServerManager::ServerManager() :
 }
 
 void ServerManager::run() {
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Origin", "*");
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Headers", "*");
+    DefaultHeaders::Instance().addHeader("Access-Control-Allow-Methods", "*");
     webServer.begin();
     serverLogger->logln("Server started");
 }
