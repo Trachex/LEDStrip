@@ -2,7 +2,7 @@
 #include "DependencyManager/DependencyManager.hpp"
 #include "utils/log.hpp"
 
-Logger* logger = new Logger("ServerManager");
+Logger* serverLogger = new Logger("ServerManager");
 
 ServerManager::ServerManager() : 
     spiffs(dependencyManager.getSPIFFS()),
@@ -11,13 +11,23 @@ ServerManager::ServerManager() :
     wifiManager(dependencyManager.getWifiManager()) {
 
     webServer.on("/static/*", HTTP_GET, [this](AsyncWebServerRequest* request) {
-        logger->logln(request->url());
+        serverLogger->logln(request->url());
         request->send(spiffs, request->url());
     });
 
     webServer.on("/", HTTP_GET, [this](AsyncWebServerRequest* request) {
-        logger->logln("index.html route");
+        serverLogger->logln("index.html route");
         request->send(spiffs, "/static/index.html");
+    });
+
+    webServer.on("/index.css", HTTP_GET, [this](AsyncWebServerRequest* request) {
+        serverLogger->logln("index.css route");
+        request->send(spiffs, "/static/index.css");
+    });
+
+    webServer.on("/index.js", HTTP_GET, [this](AsyncWebServerRequest* request) {
+        serverLogger->logln("index.js route");
+        request->send(spiffs, "/static/index.js");
     });
 
     webServer.on("/led/state", HTTP_GET, [this](AsyncWebServerRequest* request) {
@@ -39,7 +49,7 @@ ServerManager::ServerManager() :
     AsyncCallbackJsonWebHandler* ledAmount = new AsyncCallbackJsonWebHandler("/led/amount", [this](AsyncWebServerRequest *request, JsonVariant &json) {
         int amount = json["amount"];
 
-        logger->logln(amount);
+        serverLogger->logln(amount);
 
         stateManager.setAmount(amount);
 
@@ -53,7 +63,7 @@ ServerManager::ServerManager() :
     AsyncCallbackJsonWebHandler* ledDelay = new AsyncCallbackJsonWebHandler("/led/delay", [this](AsyncWebServerRequest *request, JsonVariant &json) {
         int delay = json["delay"];
 
-        logger->logln(delay);
+        serverLogger->logln(delay);
 
         if(delay < 1 || delay > 60) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -77,7 +87,7 @@ ServerManager::ServerManager() :
     AsyncCallbackJsonWebHandler* ledBrightness = new AsyncCallbackJsonWebHandler("/led/brightness", [this](AsyncWebServerRequest *request, JsonVariant &json) {
         int brightness = json["brightness"];
 
-        logger->logln(brightness);
+        serverLogger->logln(brightness);
 
         if(brightness < 1 || brightness > 255) {
             AsyncResponseStream *response = request->beginResponseStream("application/json");
@@ -101,7 +111,7 @@ ServerManager::ServerManager() :
     AsyncCallbackJsonWebHandler* ledMode = new AsyncCallbackJsonWebHandler("/led/mode", [this](AsyncWebServerRequest *request, JsonVariant &json) {
         int mode = json["mode"];
 
-        logger->logln(mode);
+        serverLogger->logln(mode);
 
         int modeAmount = stateManager.getModeAmount();
 
@@ -128,8 +138,8 @@ ServerManager::ServerManager() :
         std::string workSsid = json["workSsid"];
         std::string workPass = json["workPass"];
 
-        logger->logln(workSsid);
-        logger->logln(workPass);
+        serverLogger->logln(workSsid);
+        serverLogger->logln(workPass);
 
         stateManager.setWorkStation(workSsid, workPass);
 
@@ -152,5 +162,5 @@ ServerManager::ServerManager() :
 
 void ServerManager::run() {
     webServer.begin();
-    logger->logln("Server started");
+    serverLogger->logln("Server started");
 }
